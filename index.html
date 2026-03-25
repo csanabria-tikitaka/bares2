@@ -1,970 +1,603 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tiki Taka | Máquinas y terminales para bares</title>
-  <meta name="description" content="Máquinas recreativas y terminales para bares que generan ingresos extra sin complicaciones. Instalación, trámites, mantenimiento y soporte integral." />
+  <title>Tiki Taka | Máquinas y Terminales para Bares</title>
+  <meta name="description" content="Genera ingresos adicionales en tu bar con una máquina o terminal. Instalación, mantenimiento y gestión integral a cargo de Tiki Taka." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet" />
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     :root {
-      --bg: #0f172a;
-      --bg-soft: #111827;
-      --card: rgba(255,255,255,.08);
-      --card-strong: rgba(255,255,255,.12);
-      --line: rgba(255,255,255,.14);
-      --text: #e5e7eb;
-      --muted: #cbd5e1;
+      --black: #0a0a0a;
+      --black-soft: #111111;
+      --black-card: #161616;
+      --red: #e31e24;
+      --red-dark: #b91218;
+      --red-glow: rgba(227,30,36,0.25);
       --white: #ffffff;
-      --brand: #f59e0b;
-      --brand-2: #fb7185;
-      --ok: #22c55e;
-      --shadow: 0 20px 50px rgba(0,0,0,.28);
-      --radius: 22px;
-      --container: 1180px;
+      --white-dim: rgba(255,255,255,0.75);
+      --white-muted: rgba(255,255,255,0.45);
+      --border: rgba(255,255,255,0.08);
+      --border-red: rgba(227,30,36,0.3);
     }
 
-    * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(245,158,11,.16), transparent 28%),
-        radial-gradient(circle at 90% 10%, rgba(251,113,133,.12), transparent 22%),
-        linear-gradient(180deg, #111827 0%, #0f172a 40%, #0b1120 100%);
-      line-height: 1.5;
-    }
-
-    img { max-width: 100%; display: block; }
-    a { color: inherit; text-decoration: none; }
-    button, input, select, textarea { font: inherit; }
-
-    .container {
-      width: min(calc(100% - 32px), var(--container));
-      margin: 0 auto;
-    }
-
-    .section { padding: 84px 0; }
-    .section-sm { padding: 58px 0; }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: rgba(255,255,255,.04);
-      color: #fde68a;
-      font-size: .92rem;
-      margin-bottom: 18px;
-    }
-
-    .eyebrow::before {
-      content: "";
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--brand);
-      box-shadow: 0 0 0 4px rgba(245,158,11,.18);
-    }
-
-    .title {
-      margin: 0 0 16px;
-      font-size: clamp(2.2rem, 5vw, 4.2rem);
-      line-height: 1.02;
-      letter-spacing: -.04em;
+      font-family: 'Inter', sans-serif;
+      background: var(--black);
       color: var(--white);
+      overflow-x: hidden;
+      line-height: 1.6;
     }
 
-    .title-md {
-      margin: 0 0 14px;
-      font-size: clamp(1.8rem, 3vw, 3rem);
-      line-height: 1.08;
-      letter-spacing: -.03em;
-      color: var(--white);
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--black); }
+    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 4px; }
+
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0; opacity: 0.4;
     }
 
-    .lead {
-      max-width: 760px;
-      margin: 0;
-      color: var(--muted);
-      font-size: 1.1rem;
-    }
-
-    .muted { color: var(--muted); }
-
-    .btn-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      margin-top: 28px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 52px;
-      padding: 0 22px;
-      border-radius: 999px;
-      border: 1px solid transparent;
-      font-weight: 700;
-      transition: .22s ease;
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--brand), #f97316);
-      color: #111827;
-      box-shadow: 0 12px 28px rgba(245,158,11,.22);
-    }
-
-    .btn-primary:hover { transform: translateY(-2px); }
-
-    .btn-secondary {
-      border-color: var(--line);
-      background: rgba(255,255,255,.04);
-      color: var(--white);
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,.08);
-      transform: translateY(-2px);
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 5%;
+      background: rgba(10,10,10,0.85);
       backdrop-filter: blur(18px);
-      background: rgba(11,17,32,.72);
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
     }
-
-    .nav {
-      min-height: 78px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
+    .nav-logo {
+      display: flex; align-items: center;
     }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 800;
-      color: var(--white);
-      letter-spacing: -.02em;
+    .nav-cta {
+      background: var(--red); color: var(--white);
+      border: none; border-radius: 8px;
+      padding: 10px 20px; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.2s;
+      white-space: nowrap;
     }
+    .nav-cta:hover { background: var(--red-dark); transform: translateY(-1px); }
 
-    .brand img {
-      width: 42px;
-      height: 42px;
-      object-fit: contain;
-      border-radius: 12px;
-      background: rgba(255,255,255,.08);
-      padding: 4px;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      flex-wrap: wrap;
-      color: var(--muted);
-      font-size: .98rem;
-    }
-
-    .nav-links a:hover { color: var(--white); }
-
+    /* ── HERO ── */
     .hero {
-      padding: 54px 0 36px;
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center;
+      padding: 180px 5% 80px;
+      position: relative; overflow: hidden;
     }
-
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 60%, rgba(227,30,36,0.12) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(227,30,36,0.07) 0%, transparent 60%);
+    }
     .hero-grid {
+      position: absolute; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+    }
+    .hero-content { position: relative; z-index: 1; max-width: 820px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(227,30,36,0.12); border: 1px solid var(--border-red);
+      color: var(--red); border-radius: 50px;
+      padding: 6px 16px; font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-badge::before { content: '●'; font-size: 0.5rem; animation: pulse-dot 2s infinite; }
+    @keyframes pulse-dot { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 24px;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+    .hero h1 .accent { color: var(--red); }
+    .hero-sub {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      color: var(--white-dim);
+      max-width: 580px; margin: 0 auto 40px;
+      font-weight: 400; line-height: 1.7;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .hero-actions {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+    .btn-primary {
+      background: var(--red); color: var(--white);
+      border: none; border-radius: 12px;
+      padding: 16px 32px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.25s;
+      box-shadow: 0 0 30px var(--red-glow);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-2px); box-shadow: 0 0 50px var(--red-glow); }
+    .btn-secondary {
+      background: transparent; color: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px; padding: 16px 32px;
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none;
+      transition: all 0.25s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-secondary:hover { border-color: var(--red); background: rgba(227,30,36,0.07); transform: translateY(-2px); }
+
+    .hero-stats {
+      display: flex; gap: 40px; justify-content: center; flex-wrap: wrap;
+      margin-top: 70px; padding-top: 50px;
+      border-top: 1px solid var(--border);
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+    .stat-item { text-align: center; }
+    .stat-num { font-size: 2.2rem; font-weight: 900; color: var(--red); letter-spacing: -1px; }
+    .stat-label { font-size: 0.78rem; color: var(--white-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+    /* ── SECTIONS COMMON ── */
+    section { padding: 90px 5%; position: relative; }
+    .section-tag {
+      display: inline-block;
+      color: var(--red); font-size: 0.75rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 2px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900; letter-spacing: -1px;
+      line-height: 1.1; margin-bottom: 16px;
+    }
+    .section-sub {
+      color: var(--white-dim); font-size: 1.05rem;
+      max-width: 560px; line-height: 1.7;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how { background: var(--black-soft); }
+    .how-inner { max-width: 1100px; margin: 0 auto; }
+    .how-header { text-align: center; margin-bottom: 64px; }
+    .how-header .section-sub { margin: 0 auto; }
+    .steps-grid {
       display: grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap: 28px;
-      align-items: stretch;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2px;
     }
-
-    .hero-card,
-    .glass,
-    .card,
-    .contact-card {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+    .step {
+      background: var(--black-card);
+      padding: 36px 28px;
+      position: relative; overflow: hidden;
+      transition: transform 0.3s;
+      cursor: default;
     }
-
-    .hero-card {
-      padding: 34px;
-      position: relative;
-      overflow: hidden;
+    .step:hover { transform: translateY(-4px); }
+    .step::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--red), transparent);
+      opacity: 0; transition: opacity 0.3s;
     }
-
-    .hero-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -80px -80px auto;
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(245,158,11,.18) 0%, transparent 70%);
-      pointer-events: none;
+    .step:hover::before { opacity: 1; }
+    .step-num {
+      font-size: 3rem; font-weight: 900; color: var(--red);
+      opacity: 0.15; line-height: 1; margin-bottom: 16px;
+      font-variant-numeric: tabular-nums;
     }
+    .step-title { font-size: 1rem; font-weight: 700; margin-bottom: 10px; }
+    .step-desc { font-size: 0.88rem; color: var(--white-dim); line-height: 1.65; }
 
-    .hero-side {
-      display: grid;
-      gap: 18px;
+    /* ── BENEFITS ── */
+    .benefits { background: var(--black); }
+    .benefits-inner { max-width: 1100px; margin: 0 auto; }
+    .benefits-layout {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
     }
-
-    .glass { padding: 22px; }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      margin-top: 30px;
+    .benefits-cards { display: flex; flex-direction: column; gap: 16px; }
+    .benefit-card {
+      background: var(--black-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 24px 26px;
+      display: flex; gap: 18px; align-items: flex-start;
+      transition: all 0.3s;
     }
-
-    .stat {
-      padding: 18px;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.04);
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 1.65rem;
-      line-height: 1;
-      color: var(--white);
-      margin-bottom: 8px;
-    }
-
-    .pill-grid,
-    .cards-3,
-    .cards-4,
-    .steps,
-    .trust-grid,
-    .contact-grid,
-    .mini-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .pill-grid { grid-template-columns: repeat(3, 1fr); }
-    .cards-3 { grid-template-columns: repeat(3, 1fr); }
-    .cards-4 { grid-template-columns: repeat(4, 1fr); }
-    .steps { grid-template-columns: repeat(5, 1fr); }
-    .trust-grid { grid-template-columns: repeat(5, 1fr); }
-    .contact-grid { grid-template-columns: .82fr 1.18fr; align-items: start; }
-    .mini-grid { grid-template-columns: repeat(2, 1fr); }
-
-    .card {
-      padding: 24px;
-      height: 100%;
-    }
-
-    .card h3,
-    .glass h3,
-    .contact-card h3 {
-      margin: 0 0 10px;
-      font-size: 1.18rem;
-      color: var(--white);
-      letter-spacing: -.02em;
-    }
-
-    .icon {
-      width: 46px;
-      height: 46px;
-      display: inline-grid;
-      place-items: center;
-      margin-bottom: 16px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(245,158,11,.2), rgba(251,113,133,.18));
-      border: 1px solid rgba(255,255,255,.12);
-      font-size: 1.25rem;
-    }
-
-    .case-badge,
-    .number-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-width: 42px;
-      min-height: 42px;
-      padding: 0 12px;
-      border-radius: 14px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      font-weight: 800;
-      color: var(--white);
-      margin-bottom: 16px;
-    }
-
-    .card p,
-    .glass p,
-    .contact-card p,
-    .faq-intro {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .highlight {
-      color: #fde68a;
-      font-weight: 700;
-    }
-
-    .cta-band {
-      padding: 28px;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: center;
-      border-radius: 26px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: linear-gradient(135deg, rgba(245,158,11,.12), rgba(251,113,133,.08), rgba(255,255,255,.04));
-      box-shadow: var(--shadow);
-    }
-
-    .cta-band h3 {
-      margin: 0 0 8px;
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      color: var(--white);
-      letter-spacing: -.03em;
-    }
-
-    .step-card { position: relative; }
-
-    .step-card::after {
-      content: "";
-      position: absolute;
-      top: 37px;
-      right: -18px;
-      width: 18px;
-      height: 2px;
-      background: rgba(255,255,255,.18);
-    }
-
-    .step-card:last-child::after { display: none; }
-
-    .trust-grid .card { text-align: left; }
-
-    .faq-wrap {
-      display: grid;
-      gap: 14px;
-      margin-top: 28px;
-    }
-
-    details {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(255,255,255,.04);
-      overflow: hidden;
-    }
-
-    summary {
-      list-style: none;
-      cursor: pointer;
-      padding: 20px 22px;
-      font-weight: 700;
-      color: var(--white);
-      position: relative;
-    }
-
-    summary::-webkit-details-marker { display: none; }
-
-    summary::after {
-      content: "+";
-      position: absolute;
-      right: 22px;
-      top: 50%;
-      transform: translateY(-50%);
+    .benefit-card:hover { border-color: var(--border-red); transform: translateX(4px); }
+    .benefit-icon {
+      width: 44px; height: 44px; min-width: 44px;
+      background: rgba(227,30,36,0.1); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.3rem;
-      color: #fde68a;
     }
-
-    details[open] summary::after { content: "−"; }
-
-    .faq-body {
-      padding: 0 22px 22px;
-      color: var(--muted);
+    .benefit-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 5px; }
+    .benefit-desc { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; }
+    .benefits-text .section-sub { margin-bottom: 32px; }
+    .highlight-box {
+      background: linear-gradient(135deg, rgba(227,30,36,0.1), rgba(227,30,36,0.03));
+      border: 1px solid var(--border-red);
+      border-radius: 14px; padding: 24px 26px;
+      font-size: 0.95rem; color: var(--white-dim); line-height: 1.7;
     }
+    .highlight-box strong { color: var(--white); }
 
-    .contact-card {
-      padding: 28px;
+    /* ── CONTACT ── */
+    .contact { background: var(--black-soft); }
+    .contact-inner { max-width: 900px; margin: 0 auto; }
+    .contact-header { text-align: center; margin-bottom: 54px; }
+    .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+
+    .contact-methods { display: flex; flex-direction: column; gap: 14px; }
+    .contact-method {
+      display: flex; align-items: center; gap: 16px;
+      background: var(--black-card); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 22px;
+      text-decoration: none; color: var(--white);
+      transition: all 0.3s;
     }
-
-    .contact-list {
-      display: grid;
-      gap: 14px;
-      margin-top: 18px;
+    .contact-method:hover { border-color: var(--border-red); transform: translateX(4px); }
+    .method-icon {
+      width: 46px; height: 46px; min-width: 46px;
+      border-radius: 11px; display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
     }
+    .method-icon.whatsapp { background: rgba(37,211,102,0.12); }
+    .method-icon.phone { background: rgba(255,255,255,0.07); }
+    .method-icon.email { background: rgba(227,30,36,0.1); }
+    .method-label { font-size: 0.72rem; color: var(--white-muted); text-transform: uppercase; letter-spacing: 1px; }
+    .method-value { font-size: 0.95rem; font-weight: 600; margin-top: 2px; }
 
-    .contact-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-
-    .contact-item strong {
-      display: block;
-      margin-bottom: 4px;
-      color: var(--white);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .field,
-    .field-full {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .field-full { grid-column: 1 / -1; }
-
-    label {
-      color: var(--white);
-      font-weight: 600;
-      font-size: .96rem;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--white);
-      border-radius: 14px;
-      min-height: 52px;
-      padding: 14px 16px;
+    /* Form */
+    .contact-form { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-size: 0.78rem; color: var(--white-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.8px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: var(--black-card); border: 1px solid var(--border);
+      color: var(--white); border-radius: 10px;
+      padding: 13px 16px; font-size: 0.92rem; font-family: inherit;
+      transition: border-color 0.2s;
       outline: none;
-      transition: .2s ease;
+      -webkit-appearance: none;
     }
-
-    textarea {
-      min-height: 130px;
-      resize: vertical;
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--white-muted); }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus { border-color: var(--red); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+    .form-group select option { background: var(--black-card); }
+    .form-submit {
+      background: var(--red); color: var(--white);
+      border: none; border-radius: 12px;
+      padding: 16px; font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: all 0.25s;
+      box-shadow: 0 0 30px var(--red-glow);
     }
+    .form-submit:hover { background: var(--red-dark); transform: translateY(-2px); }
+    .form-note { font-size: 0.75rem; color: var(--white-muted); text-align: center; }
 
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: rgba(245,158,11,.5);
-      box-shadow: 0 0 0 4px rgba(245,158,11,.12);
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--border);
+      padding: 40px 5%;
+      text-align: center;
     }
-
-    select option {
-      color: #111827;
-      background: #ffffff;
+    .footer-logo {
+      margin-bottom: 12px;
     }
+    .footer-text { font-size: 0.82rem; color: var(--white-muted); line-height: 1.7; }
 
-    .legal {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: .95rem;
+    /* ── FLOATING WHATSAPP ── */
+    .wa-float {
+      position: fixed; bottom: 28px; right: 24px; z-index: 200;
+      background: #25d366; color: white;
+      width: 58px; height: 58px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; text-decoration: none;
+      box-shadow: 0 4px 24px rgba(37,211,102,0.4);
+      transition: transform 0.25s, box-shadow 0.25s;
+      animation: wa-bounce 2s 2s ease both;
     }
+    .wa-float:hover { transform: scale(1.1); box-shadow: 0 8px 32px rgba(37,211,102,0.55); }
+    @keyframes wa-bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
 
-    .legal input {
-      width: 18px;
-      min-height: 18px;
-      margin-top: 2px;
-      padding: 0;
-      accent-color: var(--brand);
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
-
-    .note {
-      margin-top: 12px;
-      color: #c7d2fe;
-      font-size: .95rem;
+    .reveal {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    .footer {
-      padding: 34px 0 54px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      color: #a5b4fc;
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 10px 5%; }
+      .nav-logo img { height: 56px !important; }
+      .hero { padding: 160px 5% 60px; }
+      .hero-stats { gap: 28px; }
+      .benefits-layout { grid-template-columns: 1fr; }
+      .contact-layout { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      section { padding: 70px 5%; }
+      .steps-grid { grid-template-columns: 1fr 1fr; }
+      .step { padding: 26px 20px; }
     }
-
-    .footer-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .sticky-cta {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      z-index: 45;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      min-height: 56px;
-      padding: 0 18px;
-      border-radius: 999px;
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white;
-      font-weight: 800;
-      box-shadow: 0 18px 30px rgba(34,197,94,.28);
-    }
-
-    .small {
-      font-size: .92rem;
-      color: var(--muted);
-    }
-
-    @media (max-width: 1080px) {
-      .hero-grid,
-      .contact-grid,
-      .cards-4,
-      .steps,
-      .trust-grid,
-      .pill-grid { grid-template-columns: repeat(2, 1fr); }
-      .cards-3 { grid-template-columns: 1fr; }
-      .step-card::after { display: none; }
-    }
-
-    @media (max-width: 760px) {
-      .section { padding: 68px 0; }
-      .hero { padding-top: 34px; }
-      .nav { min-height: 70px; }
-      .nav-links {
-        display: none;
-      }
-      .hero-grid,
-      .stats,
-      .pill-grid,
-      .cards-4,
-      .steps,
-      .trust-grid,
-      .contact-grid,
-      .form-grid,
-      .mini-grid {
-        grid-template-columns: 1fr;
-      }
-      .hero-card,
-      .contact-card,
-      .glass,
-      .card { padding: 22px; }
-      .cta-band {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .sticky-cta {
-        left: 16px;
-        right: 16px;
-        justify-content: center;
-      }
+    @media (max-width: 480px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .hero h1 { letter-spacing: -1px; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container nav">
-      <a class="brand" href="#inicio" aria-label="Ir al inicio">
-        <img src="logo.png" alt="Tiki Taka" />
-        <span>Tiki Taka Games</span>
-      </a>
 
-      <nav class="nav-links" aria-label="Principal">
-        <a href="#soluciones">Soluciones</a>
-        <a href="#como-funciona">Cómo funciona</a>
-        <a href="#ventajas">Ventajas</a>
-        <a href="#faq">FAQ</a>
-        <a href="#contacto">Contacto</a>
-      </nav>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo" style="-webkit-text-fill-color:unset; background:none;"><img src="logo.png" alt="Tiki Taka" style="height:135px; width:auto; display:block; mix-blend-mode:screen;" /></div>
+  <a href="#contacto" class="nav-cta">Contactar ahora</a>
+</nav>
 
-      <a class="btn btn-primary" href="#contacto">Quiero información</a>
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/34XXXXXXXXX?text=Hola,%20me%20interesa%20información%20sobre%20las%20máquinas%20y%20terminales%20para%20mi%20bar." class="wa-float" aria-label="WhatsApp">💬</a>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Servicio para hostelería</div>
+    <h1>Más ingresos<br/>para tu <span class="accent">bar</span>,<br/>sin esfuerzo extra</h1>
+    <p class="hero-sub">Instala una máquina o terminal en tu establecimiento y empieza a generar comisiones desde el primer día. Nosotros nos encargamos de todo.</p>
+    <div class="hero-actions">
+      <a href="#contacto" class="btn-primary">Quiero saber más ↓</a>
+      <a href="#como-funciona" class="btn-secondary">¿Cómo funciona?</a>
     </div>
-  </header>
-
-  <main>
-    <section class="hero" id="inicio">
-      <div class="container hero-grid">
-        <article class="hero-card">
-          <span class="eyebrow">Servicio integral para hostelería</span>
-          <h1 class="title">Máquinas y terminales para bares que generan ingresos extra sin añadirte trabajo</h1>
-          <p class="lead">Si acabas de abrir, quieres cambiar tu máquina actual o buscas una nueva vía de rentabilidad para tu local, te asesoramos, instalamos y gestionamos todo para que tú solo te ocupes de tu negocio.</p>
-
-          <div class="btn-row">
-            <a class="btn btn-primary" href="#contacto">Solicitar estudio de mi local</a>
-            <a class="btn btn-secondary" href="#como-funciona">Ver cómo funciona</a>
-          </div>
-
-          <div class="stats" aria-label="Puntos clave del servicio">
-            <div class="stat">
-              <strong>0€</strong>
-              <span class="small">Inversión inicial por tu parte</span>
-            </div>
-            <div class="stat">
-              <strong>100%</strong>
-              <span class="small">Gestión, soporte y mantenimiento a nuestro cargo</span>
-            </div>
-            <div class="stat">
-              <strong>+ ingresos</strong>
-              <span class="small">Nueva vía de rentabilidad para el bar</span>
-            </div>
-          </div>
-        </article>
-
-        <aside class="hero-side">
-          <div class="glass">
-            <div class="icon">🍸</div>
-            <h3>Si acabas de abrir tu bar</h3>
-            <p>Te ayudamos a incorporar una opción rentable desde el principio, con una propuesta adaptada al perfil de tu local y a tu zona.</p>
-          </div>
-
-          <div class="glass">
-            <div class="icon">🔁</div>
-            <h3>Si ya tienes una máquina</h3>
-            <p>Analizamos tu situación actual y te proponemos una alternativa más competitiva en servicio, operativa y condiciones.</p>
-          </div>
-
-          <div class="glass">
-            <div class="icon">📈</div>
-            <h3>Si quieres ganar más sin complicarte</h3>
-            <p>Nos encargamos de instalación, incidencias, mantenimiento y trámites para que el servicio funcione sin cargarte de tareas extra.</p>
-          </div>
-        </aside>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <div class="stat-num">0€</div>
+        <div class="stat-label">Inversión inicial</div>
       </div>
-    </section>
-
-    <section class="section-sm" id="soluciones">
-      <div class="container">
-        <div style="max-width:760px; margin-bottom:28px;">
-          <span class="eyebrow">Qué encaja mejor con tu local</span>
-          <h2 class="title-md">Tres formas de activar ingresos complementarios en tu bar</h2>
-          <p class="lead">No todos los establecimientos necesitan lo mismo. Por eso valoramos cada caso y te orientamos hacia la opción más adecuada.</p>
-        </div>
-
-        <div class="cards-3">
-          <article class="card">
-            <div class="icon">🎰</div>
-            <h3>Máquina recreativa</h3>
-            <p>Una solución clásica y rentable para bares que buscan una fórmula contrastada y fácil de integrar en la operativa diaria.</p>
-          </article>
-
-          <article class="card">
-            <div class="icon">🖥️</div>
-            <h3>Terminal</h3>
-            <p>Ideal para locales que prefieren una propuesta más actual, con implantación rápida y soporte continuo por nuestra parte.</p>
-          </article>
-
-          <article class="card">
-            <div class="icon">🤝</div>
-            <h3>Cambio de operador</h3>
-            <p>Si ya trabajas con otra empresa, estudiamos tu caso y te acompañamos en el cambio para mejorar condiciones y servicio.</p>
-          </article>
-        </div>
+      <div class="stat-item">
+        <div class="stat-num">100%</div>
+        <div class="stat-label">Gestión a cargo nuestro</div>
       </div>
-    </section>
-
-    <section class="section" id="ventajas">
-      <div class="container">
-        <div style="max-width:760px; margin-bottom:28px;">
-          <span class="eyebrow">Por qué nos eligen</span>
-          <h2 class="title-md">Más claridad comercial, menos fricción y una gestión realmente integral</h2>
-          <p class="lead">La propuesta no se queda en “poner una máquina”. La clave está en que el servicio funcione bien, se mantenga bien y te dé tranquilidad.</p>
-        </div>
-
-        <div class="cards-4">
-          <article class="card">
-            <div class="case-badge">01</div>
-            <h3>Asesoramiento para tu tipo de bar</h3>
-            <p>Valoramos si tu local encaja, qué solución tiene más sentido y cuál puede aportar una mejor rentabilidad sin entorpecer el espacio.</p>
-          </article>
-
-          <article class="card">
-            <div class="case-badge">02</div>
-            <h3>Instalación y legalización</h3>
-            <p>Nos ocupamos de la implantación y de los trámites necesarios para que todo quede correctamente gestionado desde el inicio.</p>
-          </article>
-
-          <article class="card">
-            <div class="case-badge">03</div>
-            <h3>Mantenimiento y soporte</h3>
-            <p>Respondemos ante incidencias y revisiones para que el servicio esté operativo y no te robe tiempo ni atención.</p>
-          </article>
-
-          <article class="card">
-            <div class="case-badge">04</div>
-            <h3>Seguimiento del rendimiento</h3>
-            <p>Te ofrecemos un modelo con control y seguimiento, pensado para que sepas qué aporta el servicio y puedas tomar decisiones con criterio.</p>
-          </article>
-        </div>
+      <div class="stat-item">
+        <div class="stat-num">+$$</div>
+        <div class="stat-label">Ingresos pasivos</div>
       </div>
-    </section>
+    </div>
+  </div>
+</section>
 
-    <section class="section-sm">
-      <div class="container">
-        <div class="cta-band">
+<!-- ══ CÓMO FUNCIONA ══ -->
+<section class="how" id="como-funciona">
+  <div class="how-inner">
+    <div class="how-header reveal">
+      <div class="section-tag">El proceso</div>
+      <h2 class="section-title">Cómo funciona</h2>
+      <p class="section-sub">Un proceso claro, sencillo y sin complicaciones. Desde el primer contacto hasta cobrar tus comisiones.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step reveal">
+        <div class="step-num">01</div>
+        <div class="step-title">Primer contacto y asesoramiento</div>
+        <p class="step-desc">Nos contactas y te explicamos cómo funciona el modelo, qué requisitos hay que tener en cuenta y qué puedes esperar en términos de operativa y rentabilidad.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">02</div>
+        <div class="step-title">Evaluación del local</div>
+        <p class="step-desc">Estudiamos tu bar para confirmar que el terminal encaja con el perfil del establecimiento y analizamos la ubicación más adecuada para maximizar su rendimiento.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">03</div>
+        <div class="step-title">Instalación del terminal</div>
+        <p class="step-desc">Realizamos la instalación de forma rápida y profesional, minimizando cualquier interferencia en la actividad habitual de tu bar.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">04</div>
+        <div class="step-title">Gestión integral por nuestra parte</div>
+        <p class="step-desc">Asumimos la gestión completa del servicio: operación, mantenimiento, soporte técnico, revisiones y cumplimiento normativo. Sin que tengas que preocuparte de nada.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">05</div>
+        <div class="step-title">Tú cobras tus comisiones</div>
+        <p class="step-desc">Tu papel es simple: beneficiarte de las comisiones generadas por el terminal instalado en tu establecimiento. Sin gestionar incidencias ni tareas técnicas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BENEFICIOS ══ -->
+<section class="benefits" id="beneficios">
+  <div class="benefits-inner">
+    <div class="benefits-layout">
+      <div class="benefits-cards">
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">💰</div>
           <div>
-            <h3>¿Quieres saber si tu local encaja?</h3>
-            <p class="muted">Te damos una valoración inicial y te explicamos qué opción tendría más sentido en tu caso.</p>
-          </div>
-          <div class="btn-row" style="margin-top:0;">
-            <a class="btn btn-primary" href="#contacto">Pedir valoración</a>
-            <a class="btn btn-secondary" href="#faq">Resolver dudas primero</a>
+            <div class="benefit-title">Ingresos pasivos adicionales</div>
+            <p class="benefit-desc">Añade una nueva vía de rentabilidad a tu negocio sin necesidad de ampliar plantilla ni asumir una operativa compleja.</p>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="section" id="como-funciona">
-      <div class="container">
-        <div style="max-width:760px; margin-bottom:28px;">
-          <span class="eyebrow">Proceso</span>
-          <h2 class="title-md">Cómo funciona, paso a paso</h2>
-          <p class="lead">Un proceso claro desde la primera conversación hasta que el servicio está funcionando y tu local empieza a generar ingresos extra.</p>
-        </div>
-
-        <div class="steps">
-          <article class="card step-card">
-            <div class="number-badge">01</div>
-            <h3>Primer contacto</h3>
-            <p>Nos cuentas tu caso y te explicamos qué opciones encajan según tu local, tus objetivos y tu situación actual.</p>
-          </article>
-
-          <article class="card step-card">
-            <div class="number-badge">02</div>
-            <h3>Evaluación del establecimiento</h3>
-            <p>Analizamos el espacio, el perfil del bar y la mejor ubicación para favorecer una implantación rentable.</p>
-          </article>
-
-          <article class="card step-card">
-            <div class="number-badge">03</div>
-            <h3>Propuesta y trámites</h3>
-            <p>Te presentamos la solución recomendada y preparamos la gestión necesaria para que no tengas que ocuparte del papeleo.</p>
-          </article>
-
-          <article class="card step-card">
-            <div class="number-badge">04</div>
-            <h3>Instalación</h3>
-            <p>Realizamos la instalación de manera ágil, cuidando la operativa habitual del local y minimizando molestias.</p>
-          </article>
-
-          <article class="card step-card">
-            <div class="number-badge">05</div>
-            <h3>Soporte y comisiones</h3>
-            <p>Tú sigues centrado en tu negocio y nosotros nos ocupamos del servicio, mantenimiento y seguimiento operativo.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-sm">
-      <div class="container">
-        <div style="max-width:760px; margin-bottom:28px;">
-          <span class="eyebrow">Lo que más valora un bar</span>
-          <h2 class="title-md">Una propuesta pensada para vender mejor desde la primera visita</h2>
-          <p class="lead">Aquí es donde tu web actual puede ganar más: explicar mejor el caso real del hostelero y reducir la incertidumbre comercial.</p>
-        </div>
-
-        <div class="trust-grid">
-          <article class="card">
-            <div class="icon">💶</div>
-            <h3>Sin inversión inicial</h3>
-            <p>No necesitas asumir una compra para empezar a valorar esta vía de ingresos.</p>
-          </article>
-
-          <article class="card">
-            <div class="icon">🛠️</div>
-            <h3>Soporte continuo</h3>
-            <p>No te dejamos solo después de instalar. El servicio incluye acompañamiento operativo.</p>
-          </article>
-
-          <article class="card">
-            <div class="icon">📋</div>
-            <h3>Trámites gestionados</h3>
-            <p>Reducimos la fricción administrativa para que el proceso te resulte mucho más fácil.</p>
-          </article>
-
-          <article class="card">
-            <div class="icon">📍</div>
-            <h3>Adaptado al local</h3>
-            <p>No aplicamos fórmulas genéricas: valoramos si de verdad tiene sentido para tu establecimiento.</p>
-          </article>
-
-          <article class="card">
-            <div class="icon">🤝</div>
-            <h3>Ideal para abrir o cambiar</h3>
-            <p>Funciona tanto si empiezas de cero como si ya tienes una máquina y buscas una alternativa mejor.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section" id="faq">
-      <div class="container">
-        <div style="max-width:760px;">
-          <span class="eyebrow">Preguntas frecuentes</span>
-          <h2 class="title-md">Las dudas que más frenan antes de pedir información</h2>
-          <p class="faq-intro">Una buena landing no solo promete; también resuelve objeciones. Estas preguntas ayudan a que el visitante llegue al contacto con más confianza.</p>
-        </div>
-
-        <div class="faq-wrap">
-          <details>
-            <summary>¿Qué pasa si ya tengo una máquina instalada?</summary>
-            <div class="faq-body">Podemos estudiar tu situación actual y valorar si tiene sentido cambiar de operador o buscar una alternativa más adecuada para tu bar. Si el cambio compensa, te acompañamos durante el proceso.</div>
-          </details>
-
-          <details>
-            <summary>¿Quién se encarga de los trámites y la instalación?</summary>
-            <div class="faq-body">La idea es que tú no tengas que gestionar la parte técnica o administrativa. Nos ocupamos de coordinar la implantación y de orientar el proceso para que sea claro y sencillo.</div>
-          </details>
-
-          <details>
-            <summary>¿Cuánto tarda en estar funcionando?</summary>
-            <div class="faq-body">Depende del tipo de local, la solución elegida y los trámites necesarios. Tras analizar tu caso, te damos una previsión realista y los siguientes pasos para arrancar cuanto antes.</div>
-          </details>
-
-          <details>
-            <summary>¿Cómo cobro mis comisiones?</summary>
-            <div class="faq-body">Te explicamos desde el principio cómo funciona el modelo económico, qué puedes esperar y cómo se gestiona la parte operativa para que tengas visibilidad y tranquilidad.</div>
-          </details>
-
-          <details>
-            <summary>¿Sirve tanto para bares nuevos como para locales que ya están funcionando?</summary>
-            <div class="faq-body">Sí. Es una solución válida para bares que acaban de abrir y quieren incorporar una fuente extra de ingresos, pero también para negocios consolidados que buscan mejorar su operativa actual.</div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-    <section class="section-sm" id="contacto">
-      <div class="container contact-grid">
-        <article class="contact-card">
-          <span class="eyebrow">Contacto</span>
-          <h2 class="title-md" style="font-size:clamp(1.8rem,3vw,2.7rem);">Cuéntanos tu caso y te orientamos</h2>
-          <p class="muted">Si estás valorando incorporar una máquina o un terminal en tu local, te damos una primera orientación sin compromiso.</p>
-
-          <div class="contact-list">
-            <div class="contact-item">
-              <div class="icon" style="margin:0; width:40px; height:40px; border-radius:12px;">💬</div>
-              <div>
-                <strong>WhatsApp</strong>
-                <span>Atención rápida para resolver dudas iniciales.</span>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="icon" style="margin:0; width:40px; height:40px; border-radius:12px;">📞</div>
-              <div>
-                <strong>Teléfono</strong>
-                <span>+34 XXX XXX XXX</span>
-              </div>
-            </div>
-
-            <div class="contact-item">
-              <div class="icon" style="margin:0; width:40px; height:40px; border-radius:12px;">✉️</div>
-              <div>
-                <strong>Email</strong>
-                <span>csanabria@tikitaka.es</span>
-              </div>
-            </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">🔧</div>
+          <div>
+            <div class="benefit-title">Cero complicaciones de gestión</div>
+            <p class="benefit-desc">Nos ocupamos de la instalación, mantenimiento, soporte y gestión integral del servicio. Tú no tienes que hacer nada.</p>
           </div>
-
-          <p class="note">Consejo: si ya tienes una máquina instalada, indícalo en el formulario. Ese dato te permite recibir una propuesta mejor enfocada.</p>
-        </article>
-
-        <article class="contact-card">
-          <h3>Solicita información</h3>
-          <p class="muted" style="margin-bottom:18px;">Déjanos tus datos y te contactamos para valorar qué solución encaja mejor con tu establecimiento.</p>
-
-          <form action="https://formsubmit.co/csanabria@tikitaka.es" method="POST">
-            <input type="hidden" name="_subject" value="Nuevo lead desde Tiki Taka Games" />
-            <input type="hidden" name="_captcha" value="false" />
-            <input type="hidden" name="_template" value="table" />
-
-            <div class="form-grid">
-              <div class="field">
-                <label for="nombre">Nombre</label>
-                <input id="nombre" name="nombre" type="text" required />
-              </div>
-
-              <div class="field">
-                <label for="telefono">Teléfono</label>
-                <input id="telefono" name="telefono" type="tel" required />
-              </div>
-
-              <div class="field">
-                <label for="bar">Nombre del bar o local</label>
-                <input id="bar" name="bar" type="text" required />
-              </div>
-
-              <div class="field">
-                <label for="localidad">Localidad</label>
-                <input id="localidad" name="localidad" type="text" required />
-              </div>
-
-              <div class="field-full">
-                <label for="situacion">Situación actual</label>
-                <select id="situacion" name="situacion" required>
-                  <option value="" selected disabled>Selecciona una opción</option>
-                  <option>Sí, ya tengo una máquina</option>
-                  <option>No, sería la primera vez</option>
-                  <option>Tuve una, pero ya no la tengo</option>
-                  <option>Estoy abriendo un local nuevo</option>
-                </select>
-              </div>
-
-              <div class="field-full">
-                <label for="mensaje">Mensaje</label>
-                <textarea id="mensaje" name="mensaje" placeholder="Cuéntanos brevemente tu caso: si estás abriendo, si ya tienes máquina, qué dudas tienes o en qué localidad está el local."></textarea>
-              </div>
-            </div>
-
-            <label class="legal">
-              <input type="checkbox" name="privacidad" required />
-              <span>He leído, entiendo y acepto la política de privacidad.</span>
-            </label>
-
-            <div class="btn-row">
-              <button class="btn btn-primary" type="submit">Enviar solicitud</button>
-              <a class="btn btn-secondary" href="https://wa.me/34600000000" target="_blank" rel="noreferrer">Hablar por WhatsApp</a>
-            </div>
-
-            <p class="note">Respuesta orientativa en menos de 24 horas laborables. Sustituye el teléfono de WhatsApp y revisa la URL del formulario antes de publicar.</p>
-          </form>
-        </article>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">⚡</div>
+          <div>
+            <div class="benefit-title">Asistencia técnica y operativa</div>
+            <p class="benefit-desc">Ante cualquier necesidad, nuestro equipo responde para garantizar el correcto funcionamiento del terminal en todo momento.</p>
+          </div>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">✅</div>
+          <div>
+            <div class="benefit-title">Cumplimiento normativo garantizado</div>
+            <p class="benefit-desc">Trabajamos con todas las garantías necesarias para que el servicio se desarrolle dentro del marco regulatorio correspondiente.</p>
+          </div>
+        </div>
+        <div class="benefit-card reveal">
+          <div class="benefit-icon">🎯</div>
+          <div>
+            <div class="benefit-title">Un servicio adaptado a tu local</div>
+            <p class="benefit-desc">No aplicamos soluciones genéricas. Valoramos cada bar de forma individual para asegurar una implantación adecuada y rentable.</p>
+          </div>
+        </div>
       </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-row">
-      <div>
-        <strong style="display:block; color:white; margin-bottom:6px;">Tiki Taka Games</strong>
-        <span>Servicio integral de máquinas y terminales para hostelería.</span>
+      <div class="benefits-text reveal">
+        <div class="section-tag">¿Por qué elegirnos?</div>
+        <h2 class="section-title">Un modelo pensado para que ganes más, con menos esfuerzo</h2>
+        <p class="section-sub">Nuestro objetivo es que tu bar obtenga una fuente estable de ingresos complementarios sin asumir cargas añadidas. Tú mantén el foco en tu negocio; nosotros gestionamos todo lo necesario.</p>
+        <div class="highlight-box" style="margin-top:28px;">
+          <strong>Una solución rentable y fácil de implantar.</strong> Sabemos que la prioridad de un bar es centrarse en sus clientes y en el funcionamiento del negocio. Por eso ofrecemos un modelo de servicio completo, ágil y sin complicaciones: analizamos tu establecimiento, valoramos la mejor ubicación y realizamos la instalación con todas las garantías. <strong>Desde ese momento, tu bar empieza a generar ingresos adicionales.</strong>
+        </div>
       </div>
-      <div class="small">© 2026 Tiki Taka Games. Todos los derechos reservados.</div>
     </div>
-  </footer>
+  </div>
+</section>
 
-  <a class="sticky-cta" href="https://wa.me/34600000000" target="_blank" rel="noreferrer" aria-label="Hablar por WhatsApp">
-    <span>WhatsApp</span>
-    <span>→</span>
-  </a>
+<!-- ══ CONTACTO ══ -->
+<section class="contact" id="contacto">
+  <div class="contact-inner">
+    <div class="contact-header reveal">
+      <div class="section-tag">Habla con nosotros</div>
+      <h2 class="section-title">¿Te interesa? Contáctanos</h2>
+      <p class="section-sub" style="margin:0 auto;">Si estás valorando incorporar un terminal en tu establecimiento, te ofrecemos un proceso claro, profesional y sin complicaciones.</p>
+    </div>
+    <div class="contact-layout">
+      <div>
+        <div class="contact-methods reveal">
+          <a href="https://wa.me/34XXXXXXXXX?text=Hola,%20me%20interesa%20información%20sobre%20las%20máquinas%20y%20terminales%20para%20mi%20bar." class="contact-method">
+            <div class="method-icon whatsapp">💬</div>
+            <div>
+              <div class="method-label">WhatsApp</div>
+              <div class="method-value">Escríbenos directamente</div>
+            </div>
+          </a>
+          <a href="tel:+34XXXXXXXXX" class="contact-method">
+            <div class="method-icon phone">📞</div>
+            <div>
+              <div class="method-label">Teléfono</div>
+              <div class="method-value">+34 XXX XXX XXX</div>
+            </div>
+          </a>
+          <a href="mailto:csanabriao@tikitaka.es" class="contact-method">
+            <div class="method-icon email">✉️</div>
+            <div>
+              <div class="method-label">Email</div>
+              <div class="method-value">csanabria@tikitaka.es</div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="reveal">
+        <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Nombre</label>
+              <input type="text" placeholder="Tu nombre" required />
+            </div>
+            <div class="form-group">
+              <label>Teléfono</label>
+              <input type="tel" placeholder="+34 6XX XXX XXX" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Nombre del bar / local</label>
+            <input type="text" placeholder="¿Cómo se llama tu establecimiento?" />
+          </div>
+          <div class="form-group">
+            <label>Localidad</label>
+            <input type="text" placeholder="Ciudad o municipio" />
+          </div>
+          <div class="form-group">
+            <label>¿Tienes ya alguna máquina?</label>
+            <select>
+              <option value="">Selecciona una opción</option>
+              <option>Sí, actualmente tengo una máquina</option>
+              <option>No, sería la primera vez</option>
+              <option>Tuve pero ya no la tengo</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Mensaje (opcional)</label>
+            <textarea placeholder="Cuéntanos algo sobre tu local o cualquier duda que tengas..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Enviar solicitud →</button>
+          <p class="form-note">Nos pondremos en contacto contigo en menos de 24 horas.</p>
+        </form>
+        <div id="formSuccess" style="display:none; text-align:center; padding:40px 20px;">
+          <div style="font-size:3rem; margin-bottom:16px;">✅</div>
+          <h3 style="font-size:1.3rem; margin-bottom:10px;">¡Solicitud enviada!</h3>
+          <p style="color:var(--white-dim); font-size:0.9rem;">Nos pondremos en contacto contigo muy pronto para explicarte todos los detalles del servicio.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-logo" style="-webkit-text-fill-color:unset; background:none;"><img src="logo.png" alt="Tiki Taka" style="height:100px; width:auto; display:block; margin:0 auto 14px; mix-blend-mode:screen;" /></div>
+  <p class="footer-text">
+    Tiki Taka Games · Servicio integral de máquinas de juegos y terminales para hostelería<br/>
+    © 2025 Tiki Taka Games. Todos los derechos reservados.
+  </p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // Form submit mock
+  function handleSubmit(e) {
+    e.preventDefault();
+    document.getElementById('contactForm').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+  }
+
+  // Nav shrink on scroll
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.padding = window.scrollY > 60 ? '12px 5%' : '18px 5%';
+  });
+</script>
 </body>
 </html>
